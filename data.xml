@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<football>
+    <clubs>
+        <club>
+            <name>Астана</name>
+            <points>30</points>
+            <wins>10</wins>
+            <draws>0</draws>
+            <losses>0</losses>
+        </club>
+        <club>
+            <name>Кайрат</name>
+            <points>25</points>
+            <wins>8</wins>
+            <draws>1</draws>
+            <losses>1</losses>
+        </club>
+        <club>
+            <name>Шахтёр</name>
+            <points>20</points>
+            <wins>6</wins>
+            <draws>2</draws>
+            <losses>2</losses>
+        </club>
+        <club>
+            <name>Тобол</name>
+            <points>18</points>
+            <wins>6</wins>
+            <draws>1</draws>
+            <losses>3</losses>
+        </club>
+        <club>
+            <name>Ордабасы</name>
+            <points>15</points>
+            <wins>5</wins>
+            <draws>1</draws>
+            <losses>4</losses>
+        </club>
+    </clubs>
+    <news>
+        <item>«Астана» победила «Кайрат» со счётом 2:1.</item>
+        <item>Тренер сборной Казахстана анонсировал тактические изменения, в связи с плохой атакующей частью команды.</item>
+    </news>
+</football>

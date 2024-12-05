@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Казахстанский Футбол</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: linear-gradient(90deg, #00203d, #662900, #565f00);
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        #animated-title {
+            position: relative;
+            white-space: nowrap;
+            font-size: 24px;
+            font-weight: bold;
+            animation: moveLeft 10s linear infinite;
+        }
+        @keyframes moveLeft {
+            0% { transform: translateX(60%); }
+            100% { transform: translateX(-60%); }
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            background: linear-gradient(90deg, #0084ff, #ff6600, #e5ff00);
+        }
+        nav a {
+            color: #fff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #ff9900;
+        }
+        .content {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .section {
+            background-color: #fff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+        .section h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #444;
+            color: #fff;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(90deg, #0084ff, #ff6600, #e5ff00);
+            color: #fff;
+        }
+        #flag {
+            width: 150px;
+            transition: transform 0.1s ease;
+        }
+        .club-logo {
+            width: 35px;
+            height: auto;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    </style>
+
+    <!-- Подключаем библиотеки -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1 id="animated-title">Казахстанский Футбол</h1>
+    <p>Новости, результаты и информация о клубах</p>
+    <label for="news-date">Выберите дату:</label>
+    <input type="text" id="news-date" placeholder="Выберите дату" />
+</header>
+
+<nav>
+    <a href="#news">Новости</a>
+    <a href="#results">Результаты</a>
+    <a href="#clubs">Клубы</a>
+</nav>
+
+<div class="content">
+    <!-- Новости -->
+    <section id="news" class="section">
+        <h2>Новости</h2>
+        <div id="news-app">
+            <ul>
+                <li v-for="(news, index) in newsList" :key="index">
+                    {{ news }}
+                    <button @click="removeNews(index)" style="margin-left: 10px;">Удалить</button>
+                </li>
+            </ul>
+            <div>
+                <input type="text" v-model="newNews" placeholder="Введите новость" style="width: 70%;">
+                <button @click="addNews">Добавить новость</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="controls" class="section">
+        <h2>Обновление данных</h2>
+        <button id="update-data-btn">Обновить данные</button>
+    </section>    
+
+    <!-- Результаты матчей -->
+    <section id="results" class="section">
+        <input type="text" v-model="filter" placeholder="Поиск по названию клуба" style="margin-bottom: 10px; width: 100%; padding: 5px;">
+        <h2>Результаты матчей</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th @click="sortTable('club')">Клуб</th>
+                    <th @click="sortTable('points')">Очки</th>
+                    <th @click="sortTable('wins')">Выигрыши</th>
+                    <th @click="sortTable('draws')">Ничьи</th>
+                    <th @click="sortTable('losses')">Поражения</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(team, index) in filteredTeams" :key="index">
+                    <td>{{ team.club }}</td>
+                    <td>{{ team.points }}</td>
+                    <td>{{ team.wins }}</td>
+                    <td>{{ team.draws }}</td>
+                    <td>{{ team.losses }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button @click="generateTable">Сбросить таблицу</button>
+    </section>
+
+    <!-- Флаг Казахстана -->
+    <section id="flag-section">
+        <h2>Анимация Флага Казахстана</h2>
+        <img id="flag" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Flag_of_Kazakhstan.svg/1920px-Flag_of_Kazakhstan.svg.png" alt="Флаг Казахстана">
+    </section>
+
+    <!-- Анимация футболиста -->
+    <section id="football-animation" class="section">
+        <h2>Анимация Футболиста</h2>
+        <canvas id="football-canvas" width="600" height="400"></canvas>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2024 Казахстанский Футбол. Все права защищены.</p>
+</footer>
+
+<script src="site.js"></script>
+
+<script>
+fetch('data.xml')
+    .then(response => response.text())
+    .then(data => {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data, "text/xml");
+
+        // Обновляем список новостей
+        const newsItems = xmlDoc.getElementsByTagName("item");
+        const newsContainer = document.getElementById("news-app").querySelector("ul");
+        newsContainer.innerHTML = ""; // Очищаем список
+        for (let i = 0; i < newsItems.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = newsItems[i].textContent;
+            newsContainer.appendChild(li);
+        }
+
+        // Обновляем таблицу с клубами
+        const clubs = xmlDoc.getElementsByTagName("club");
+        const tbody = document.querySelector("#results table tbody");
+        tbody.innerHTML = ""; // Очищаем таблицу
+        for (let i = 0; i < clubs.length; i++) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${clubs[i].getElementsByTagName("name")[0].textContent}</td>
+                <td>${clubs[i].getElementsByTagName("points")[0].textContent}</td>
+                <td>${clubs[i].getElementsByTagName("wins")[0].textContent}</td>
+                <td>${clubs[i].getElementsByTagName("draws")[0].textContent}</td>
+                <td>${clubs[i].getElementsByTagName("losses")[0].textContent}</td>
+            `;
+            tbody.appendChild(row);
+        }
+    })
+    .catch(error => console.error('Ошибка загрузки данных:', error));
+</script>
+
+</body>
+</html>
